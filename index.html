@@ -1,587 +1,238 @@
 <!doctype html>
-<html lang="zh-Hant">
+<html lang="en">
 <head>
-<meta charset="utf-8" />
-<meta name="viewport" content="width=device-width, initial-scale=1" />
-<title>Valentine</title>
-
-<style>
-  :root{
-    --bg1:#fff6fb;
-    --bg2:#ffe7f2;
-    --bg3:#fff;
-    --card: rgba(255,255,255,.72);
-    --shadow: 0 26px 70px rgba(0,0,0,.12);
-    --text:#2a1b2a;
-    --muted:#6b3a52;
-    --pink:#ff4d8d;
-    --pink2:#ff77aa;
-    --ring: rgba(255,77,141,.35);
-  }
-
-  *{ box-sizing:border-box; }
-
-  body{
-    margin:0;
-    min-height:100vh;
-    display:grid;
-    place-items:center;
-    font-family: ui-rounded, system-ui, -apple-system, "Segoe UI", "PingFang TC", "Noto Sans TC", sans-serif;
-    color:var(--text);
-    background:
-      radial-gradient(1200px 800px at 18% 10%, var(--bg1), transparent 60%),
-      radial-gradient(1200px 800px at 82% 92%, var(--bg2), transparent 60%),
-      linear-gradient(135deg, var(--bg3), #ffeaf4);
-    overflow:hidden;
-  }
-
-  /* 微光 */
-  .glow{
-    position:fixed;
-    width:620px; height:620px;
-    background: radial-gradient(circle at 30% 30%, rgba(255,77,141,.26), transparent 55%),
-                radial-gradient(circle at 70% 70%, rgba(255,119,170,.20), transparent 55%);
-    filter: blur(10px);
-    opacity:.9;
-    pointer-events:none;
-    animation: drift 8s ease-in-out infinite;
-  }
-  @keyframes drift{
-    0%,100%{ transform: translate(-10px, -10px) scale(1); }
-    50%{ transform: translate(12px, 14px) scale(1.03); }
-  }
-
-  /* 漂浮愛心背景 */
-  .hearts{
-    position:fixed; inset:0;
-    pointer-events:none;
-    overflow:hidden;
-  }
-  .heart{
-    position:absolute;
-    opacity:.20;
-    animation: floatUp linear infinite;
-    filter: blur(.15px);
-    will-change: transform;
-  }
-  @keyframes floatUp{
-    from{ transform: translateY(110vh) translateX(0) rotate(0deg); }
-    to  { transform: translateY(-20vh) translateX(50px) rotate(360deg); }
-  }
-
-  .card{
-    width:min(620px, 92vw);
-    background: var(--card);
-    border: 1px solid rgba(255,255,255,.55);
-    border-radius: 28px;
-    padding: 34px 24px 26px;
-    box-shadow: var(--shadow);
-    backdrop-filter: blur(14px);
-    position:relative;
-    overflow:hidden;
-  }
-
-  .card::before{
-    content:"";
-    position:absolute; inset:-2px;
-    background: radial-gradient(600px 280px at 20% 0%, rgba(255,77,141,.18), transparent 55%),
-                radial-gradient(600px 280px at 80% 100%, rgba(255,119,170,.14), transparent 55%);
-    pointer-events:none;
-  }
-
-  h1{
-    position:relative;
-    margin:0;
-    font-size: clamp(34px, 4.8vw, 52px);
-    line-height:1.06;
-    text-align:center;
-    letter-spacing:-.6px;
-    text-shadow: 0 10px 30px rgba(0,0,0,.06);
-  }
-
-  /* 兩欄：左 Yes 固定，右 No 在右邊區塊內亂跑（永遠不會蓋到 Yes） */
-  .buttons{
-    position:relative;
-    margin-top: 22px;
-    height: 80px;
-    display:grid;
-    grid-template-columns: 1fr 1fr;
-    gap: 18px;
-    align-items:center;
-  }
-  .slot{
-    position:relative;
-    height:80px;
-    display:flex;
-    align-items:center;
-    justify-content:center;
-  }
-
-  /* ✅ 按鈕更小 */
-  button{
-    border:none;
-    padding:9px 12px;
-    border-radius:999px;
-    font-size:14px;
-    font-weight:800;
-    cursor:pointer;
-    user-select:none;
-    transition: transform .14s ease, filter .14s ease, box-shadow .14s ease, opacity .14s ease;
-    white-space:nowrap;
-  }
-
-  #yes{
-    background: linear-gradient(135deg, var(--pink), var(--pink2));
-    color:#fff;
-    min-width: 122px;
-    box-shadow: 0 14px 24px rgba(255,77,141,.25);
-    position:relative;
-    z-index:2;
-  }
-  #yes:hover{ transform: translateY(-2px) scale(1.02); }
-  #yes:active{ transform: translateY(0) scale(.985); filter:saturate(1.05); }
-  #yes:focus-visible{
-    outline:none;
-    box-shadow: 0 14px 24px rgba(255,77,141,.25), 0 0 0 5px var(--ring);
-  }
-
-  #no{
-    position:absolute;
-    background: rgba(255,255,255,.92);
-    color: var(--muted);
-    border: 1px solid rgba(0,0,0,.08);
-    box-shadow: 0 12px 22px rgba(0,0,0,.10);
-    min-width: 122px;
-    left: 50%;
-    top: 50%;
-    transform: translate(-50%, -50%);
-    z-index:1;
-
-    transition:
-      left .42s cubic-bezier(.22,1,.36,1),
-      top  .42s cubic-bezier(.22,1,.36,1),
-      transform .12s ease;
-  }
-  #no:hover{ transform: translate(-50%, -50%) translateY(-1px); }
-
-  /* No 抖動 */
-  .shake{ animation: shake .22s infinite; }
-  @keyframes shake{
-    0%{transform:translate(-50%,-50%)}
-    25%{transform:translate(calc(-50% - 2px), calc(-50% + 2px))}
-    50%{transform:translate(calc(-50% + 2px), calc(-50% - 2px))}
-    75%{transform:translate(calc(-50% - 2px), calc(-50% - 2px))}
-    100%{transform:translate(-50%,-50%)}
-  }
-
-  /* 尖叫 emoji */
-  .scream{
-    position:absolute;
-    font-size:22px;
-    animation: pop .65s ease-out forwards;
-    pointer-events:none;
-    filter: drop-shadow(0 8px 12px rgba(0,0,0,.12));
-  }
-  @keyframes pop{
-    0%{opacity:1; transform:translate(-50%, 0) scale(1)}
-    100%{opacity:0; transform:translate(-50%, -34px) scale(1.7)}
-  }
-
-  /* Are you sure 類文字（有動畫） */
-  .taunt{
-    position:absolute;
-    font-size:14px;
-    font-weight:800;
-    color:#8a3a5c;
-    animation: taunt 1.2s ease-out forwards;
-    pointer-events:none;
-    white-space:nowrap;
-    filter: drop-shadow(0 10px 12px rgba(0,0,0,.10));
-  }
-  @keyframes taunt{
-    0%{opacity:0; transform:translate(-50%, 10px) scale(.92)}
-    18%{opacity:1}
-    100%{opacity:0; transform:translate(-50%, -28px) scale(1.06)}
-  }
-
-  /* 彩帶粒子 */
-  .confetti{
-    position:absolute;
-    width:10px; height:14px;
-    border-radius:3px;
-    opacity:.95;
-    pointer-events:none;
-    animation: confetti 900ms ease-out forwards;
-    filter: drop-shadow(0 10px 10px rgba(0,0,0,.10));
-  }
-  @keyframes confetti{
-    0%{ transform: translate(var(--x0), var(--y0)) rotate(0deg); opacity:1; }
-    100%{ transform: translate(var(--x1), var(--y1)) rotate(480deg); opacity:0; }
-  }
-
-  .result{
-    position:relative;
-    margin-top: 18px;
-    padding: 14px 14px;
-    border-radius: 16px;
-    background: rgba(255,255,255,.55);
-    border: 1px solid rgba(255,255,255,.55);
-    box-shadow: 0 12px 30px rgba(0,0,0,.06);
-    min-height: 56px;
-    display:flex;
-    align-items:center;
-    justify-content:center;
-    text-align:center;
-    font-size: 18px;
-    font-weight: 800;
-    color:#b0124f;
-  }
-
-  .result.muted{
-    color: rgba(176,18,79,.0);
-    background: rgba(255,255,255,.25);
-    border-color: rgba(255,255,255,.35);
-  }
-
-  .small{
-    display:block;
-    margin-top:6px;
-    font-size: 13px;
-    font-weight: 800;
-    opacity:.72;
-    color: #6b3a52;
-  }
-
-  /* ✅ 金額逐位跳動（轉輪） */
-  .money{
-    display:inline-flex;
-    gap:2px;
-    align-items:flex-end;
-    font-variant-numeric: tabular-nums;
-  }
-  .digit{
-    position:relative;
-    width: .82em;
-    height: 1.2em;
-    overflow:hidden;
-    display:inline-block;
-    border-radius:8px;
-    background: rgba(255,255,255,.35);
-    box-shadow: inset 0 1px 0 rgba(255,255,255,.6);
-  }
-  .digit-strip{
-    position:absolute;
-    left:0; top:0;
-    width:100%;
-    will-change: transform;
-  }
-  .digit-strip span{
-    display:block;
-    height: 1.2em;
-    line-height: 1.2em;
-    text-align:center;
-  }
-</style>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>Jie Lin</title>
+  <meta name="description" content="Jie Lin — academic homepage (ML for time series, healthcare AI, XAI)." />
+  <style>
+    :root{
+      --bg:#ffffff; --fg:#111827; --muted:#4b5563; --line:#e5e7eb; --link:#1d4ed8;
+      --max: 920px;
+      --sans: ui-sans-serif, system-ui, -apple-system, Segoe UI, Roboto, Helvetica, Arial, "Noto Sans", "Noto Sans TC", "PingFang TC", "Microsoft JhengHei", sans-serif;
+      --mono: ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas, "Liberation Mono", "Courier New", monospace;
+    }
+    @media (prefers-color-scheme: dark){
+      :root{ --bg:#0b1220; --fg:#e5e7eb; --muted:#9ca3af; --line:#1f2937; --link:#7aa7ff; }
+    }
+    *{box-sizing:border-box}
+    html{scroll-behavior:smooth}
+    body{
+      margin:0; font-family:var(--sans); background:var(--bg); color:var(--fg); line-height:1.65;
+    }
+    a{color:var(--link); text-decoration:none}
+    a:hover{text-decoration:underline}
+    .wrap{max-width:var(--max); margin:0 auto; padding:28px 18px 60px}
+    header{display:flex; flex-wrap:wrap; gap:12px; align-items:baseline; justify-content:space-between; padding-bottom:14px; border-bottom:1px solid var(--line)}
+    h1{margin:0; font-size:22px; letter-spacing:.2px}
+    nav{display:flex; gap:12px; flex-wrap:wrap}
+    nav a{font-size:14px; color:var(--muted)}
+    nav a:hover{color:var(--fg)}
+    .sub{margin:14px 0 0; color:var(--muted); max-width:78ch}
+    section{padding-top:18px}
+    h2{margin:0 0 8px; font-size:15px; text-transform:uppercase; letter-spacing:.08em; color:var(--muted)}
+    .grid{display:grid; grid-template-columns: 1fr 1fr; gap:14px}
+    @media (max-width: 820px){ .grid{grid-template-columns:1fr} }
+    ul{margin:8px 0 0; padding-left:18px}
+    li{margin:6px 0}
+    .item{padding:10px 0; border-top:1px solid var(--line)}
+    .item:first-child{border-top:none; padding-top:0}
+    .row{display:flex; gap:10px; flex-wrap:wrap; justify-content:space-between; align-items:baseline}
+    .where{font-weight:600}
+    .meta{color:var(--muted); font-family:var(--mono); font-size:12px}
+    .note{margin:6px 0 0; color:var(--muted)}
+    footer{margin-top:26px; padding-top:14px; border-top:1px solid var(--line); color:var(--muted); font-size:13px}
+    .inline-links{display:flex; flex-wrap:wrap; gap:10px; margin-top:10px}
+    .tagline{font-family:var(--mono); font-size:12px; color:var(--muted)}
+  </style>
 </head>
 
 <body>
-  <div class="glow" aria-hidden="true"></div>
-  <div class="hearts" id="hearts" aria-hidden="true"></div>
-
-  <main class="card">
-    <h1>Would you be my<br>valentine ❤️</h1>
-
-    <div class="buttons" id="arena">
-      <div class="slot" id="yesSlot">
-        <button id="yes">Yes!!! 💖</button>
+  <div class="wrap">
+    <header>
+      <div>
+        <h1>Jie Lin</h1>
+        <div class="tagline">Time-series ML · Healthcare AI · XAI</div>
       </div>
-      <div class="slot" id="noSlot">
-        <button id="no" type="button">No 🙈</button>
-      </div>
+      <nav aria-label="Site">
+        <a href="#about">About</a>
+        <a href="#publications">Publications</a>
+        <a href="#experience">Experience</a>
+        <a href="#contact">Contact</a>
+      </nav>
+    </header>
+
+    <p class="sub" id="about">
+      I work on machine learning for sequential signals (e.g., speech, ECG) with an interest in robust time-series modeling,
+      healthcare applications, and interpretability.
+    </p>
+
+    <div class="inline-links">
+      <span class="meta">Taipei, Taiwan</span>
+      <span class="meta">•</span>
+      <a class="meta" href="mailto:B11705048@ntu.edu.tw">B11705048@ntu.edu.tw</a>
+      <span class="meta">•</span>
+      <a class="meta" href="tel:+886970911419">+886-970-911-419</a>
+      <span class="meta">•</span>
+      <!-- Replace # with your links -->
+      <a class="meta" href="#" onclick="alert('Replace # with your Google Scholar URL.'); return false;">Google Scholar</a>
+      <span class="meta">•</span>
+      <a class="meta" href="#" onclick="alert('Replace # with your GitHub URL.'); return false;">GitHub</a>
+      <span class="meta">•</span>
+      <a class="meta" href="#" onclick="alert('Replace # with your LinkedIn URL.'); return false;">LinkedIn</a>
+      <span class="meta">•</span>
+      <!-- Put your PDF in the same folder and change to ./Lin_J_Resume_Feb26.pdf -->
+      <a class="meta" href="#" onclick="alert('Place your CV PDF next to this file and link it (e.g., ./Lin_J_Resume_Feb26.pdf).'); return false;">CV (PDF)</a>
     </div>
 
-    <div class="result muted" id="result">
-      <span id="resultText">.</span>
-    </div>
-  </main>
+    <section>
+      <h2>Education</h2>
+      <div class="grid">
+        <div>
+          <div class="item">
+            <div class="row">
+              <div class="where">The University of British Columbia (UBC) — M.Sc. in Computer Science</div>
+              <div class="meta">Starting Sep 2026</div>
+            </div>
+            <div class="note">Supervisor: Prof. Xin Tang</div>
+          </div>
+        </div>
+        <div>
+          <div class="item">
+            <div class="row">
+              <div class="where">National Taiwan University (NTU) — B.B.A. in Information Management</div>
+              <div class="meta">Sep 2022 – Jun 2026 (expected)</div>
+            </div>
+            <div class="note">GPA 4.12/4.3 · Presidential Award (Top 2%) · Minor: Math; CSIE minor completion in 2026/06</div>
+          </div>
+        </div>
+      </div>
+    </section>
 
-<script>
-  // 背景愛心
-  const hearts = document.getElementById('hearts');
-  const heartChars = ['❤️','💗','💖','💘','💕','💞'];
-  for (let i = 0; i < 28; i++) {
-    const s = document.createElement('div');
-    s.className = 'heart';
-    s.textContent = heartChars[Math.floor(Math.random() * heartChars.length)];
-    s.style.left = (Math.random() * 100) + 'vw';
-    s.style.fontSize = (12 + Math.random() * 18) + 'px';
-    s.style.animationDuration = (7 + Math.random() * 10) + 's';
-    s.style.animationDelay = (-Math.random() * 10) + 's';
-    hearts.appendChild(s);
-  }
+    <section id="publications">
+      <h2>Publications / Preprints</h2>
 
-  const arena  = document.getElementById('arena');
-  const noSlot = document.getElementById('noSlot');
-  const noBtn  = document.getElementById('no');
-  const yesBtn = document.getElementById('yes');
-  const result = document.getElementById('result');
-  const resultText = document.getElementById('resultText');
+      <div class="item">
+        <div class="row">
+          <div class="where">MSECG: Incorporating Mamba for Robust and Efficient ECG Super-Resolution</div>
+          <div class="meta">ICASSP 2025 · First Author</div>
+        </div>
+        <div class="note">IEEE Xplore.</div>
+      </div>
 
-  const screams = ['😱','🙀','😵','🫣','😳'];
-  const taunts = [
-    'Are you sure?',
-    '真的要這樣嗎？',
-    '再想一下啦…',
-    '不後悔嗎？',
-    '最後一次機會喔',
-    '你確定？？',
-    '真的不要嗎 😢',
-    '我會很傷心耶',
-    '按錯了吧？',
-    '你忍心嗎…',
-    '再給我一次機會 🥺',
-    '確定要拒絕我嗎？'
-  ];
+      <div class="item">
+        <div class="row">
+          <div class="where">Generating Light-based Fingerprints for Indoor Localization</div>
+          <div class="meta">Mobile Computing Workshop 2024 · First Author</div>
+        </div>
+        <div class="note">Oral presentation · Honorable Mention Paper Award.</div>
+      </div>
 
-  const MONEY_KEY = 'valentine_red_packet_money_v1';
+      <div class="item">
+        <div class="row">
+          <div class="where">LiGen: GAN-Augmented Spectral Fingerprinting for Indoor Positioning</div>
+          <div class="meta">VTC 2026 · In Preparation</div>
+        </div>
+        <div class="note">arXiv:2508.03024</div>
+      </div>
+    </section>
 
-  let lastMoveAt = 0;
-  const MOVE_CD_MS = 180;
+    <section id="experience">
+      <h2>Research & Work</h2>
 
-  let lastTauntAt = 0;
-  const TAUNT_CD_MS = 650;
+      <div class="item">
+        <div class="row">
+          <div class="where">Project Research Assistant — NTU Speech Processing & ML Lab</div>
+          <div class="meta">Feb 2026 – Present</div>
+        </div>
+        <div class="note">Taiwan-localized Speech LLMs · Advisor: Prof. Hung-yi Lee</div>
+      </div>
 
-  let lastScreamAt = 0;
-  const SCREAM_CD_MS = 450;
+      <div class="item">
+        <div class="row">
+          <div class="where">AI/ML Research Intern — University of Alberta (Mitacs Globalink)</div>
+          <div class="meta">Apr 2025 – Feb 2026</div>
+        </div>
+        <div class="note">Deep survival prediction / readmission · Advisors: Prof. Russell Greiner, Prof. Sunil Kalmady Vasu</div>
+      </div>
 
-  const ACTIVE_LIMIT = 2;
-  let activeTaunts = 0;
+      <div class="item">
+        <div class="row">
+          <div class="where">Data Science Research Assistant — NTU Financial Data Analytics Lab</div>
+          <div class="meta">Sep 2024 – Aug 2025</div>
+        </div>
+        <div class="note">Earnings calls & analyst reports · n-gram + regression for technology diffusion · Advisor: Prof. Chris (Chen-Ting) Lien</div>
+      </div>
 
-  function randInt(min, max){
-    return Math.floor(Math.random() * (max - min + 1)) + min;
-  }
-  function rand(arr){
-    return arr[Math.floor(Math.random() * arr.length)];
-  }
+      <div class="item">
+        <div class="row">
+          <div class="where">Undergraduate Research — NTU Pervasive & Autonomous Intelligence Lab</div>
+          <div class="meta">Jan 2024 – May 2025</div>
+        </div>
+        <div class="note">Ambient light spectral fingerprinting for indoor localization · GAN-based data augmentation · Advisor: Prof. Fang-Jing Wu</div>
+      </div>
 
-  // ✅ 產生 888～4888 且尾數固定 xx88
-  function generateMoneyXX88(){
-    // 88, 188, 288, ... 4888 的候選；再把 <888 拉到 888
-    const base = randInt(0, 48) * 100;
-    let money = base + 88;
-    if (money < 888) money = 888;
-    if (money > 4888) money = 4888;
-    return money;
-  }
+      <div class="item">
+        <div class="row">
+          <div class="where">Summer Research Intern — Academia Sinica, Biomedical Acoustic Signal Processing Lab</div>
+          <div class="meta">Jun 2024 – Aug 2024</div>
+        </div>
+        <div class="note">ECG super-resolution · Mamba-based modeling · Host: Dr. Yu Tsao</div>
+      </div>
 
-  function spawnScreamAndTaunt(){
-    const now = performance.now();
-    const b = noBtn.getBoundingClientRect();
+      <div class="item">
+        <div class="row">
+          <div class="where">R&D Intern (AI) — Tomofun (Furbo)</div>
+          <div class="meta">Sep 2025 – Present</div>
+        </div>
+        <div class="note">Notification algorithm optimization · text–video retrieval</div>
+      </div>
 
-    // 偏移避免疊在同一點
-    const ox = (Math.random() * 48) - 24;
-    const oy = (Math.random() * 20) - 10;
+      <div class="item">
+        <div class="row">
+          <div class="where">Teaching Assistant — NTU CSIE5411 Mobile and Pervasive Intelligence</div>
+          <div class="meta">Sep 2025 – Present</div>
+        </div>
+        <div class="note">Python data augmentation package development (API, docs, tests)</div>
+      </div>
+    </section>
 
-    // 尖叫（CD）
-    if (now - lastScreamAt >= SCREAM_CD_MS) {
-      lastScreamAt = now;
-      const s = document.createElement('div');
-      s.className = 'scream';
-      s.textContent = rand(screams);
-      s.style.left = (b.left + b.width/2 + ox) + 'px';
-      s.style.top  = (b.top + oy) + 'px';
-      document.body.appendChild(s);
-      setTimeout(()=>s.remove(), 700);
-    }
+    <section>
+      <h2>Awards</h2>
+      <ul>
+        <li>Mitacs Globalink Research Internship Award (Summer 2025, CAD 12,000)</li>
+        <li>NTU Presidential Award (Top 2%, Dec 2024)</li>
+        <li>SLU Taiwan Alumni Association Scholarship (Dec 2024)</li>
+        <li>Mobile Computing Workshop: Honorable Mention Paper Award (Aug 2024)</li>
+        <li>Smart Logistic Datathon 2024: 1st Runner-Up (Apr 2024)</li>
+      </ul>
+    </section>
 
-    // 文案（CD + 同時數量限制）
-    if (now - lastTauntAt < TAUNT_CD_MS) return;
-    if (activeTaunts >= ACTIVE_LIMIT) return;
+    <section>
+      <h2>Selected Skills</h2>
+      <ul>
+        <li><strong>Languages:</strong> C/C++, Python, R, SQL, RISC-V Assembly, Verilog</li>
+        <li><strong>ML:</strong> PyTorch, TensorFlow, scikit-learn, NumPy, pandas</li>
+        <li><strong>Focus:</strong> time-series DL, benchmarking/ablation, text mining</li>
+      </ul>
+    </section>
 
-    lastTauntAt = now;
-    activeTaunts++;
+    <section id="contact">
+      <h2>Contact</h2>
+      <ul>
+        <li>Email: <a href="mailto:B11705048@ntu.edu.tw">B11705048@ntu.edu.tw</a></li>
+        <li>Phone: <a href="tel:+886970911419">+886-970-911-419</a></li>
+        <li>Location: Taipei, Taiwan</li>
+      </ul>
+    </section>
 
-    const t = document.createElement('div');
-    t.className = 'taunt';
-    t.textContent = rand(taunts);
-    t.style.left = (b.left + b.width/2 + ox) + 'px';
-    t.style.top  = (b.top + 26 + oy) + 'px';
-    document.body.appendChild(t);
+    <footer>
+      © <span id="y"></span> Jie Lin · Minimal academic homepage.
+    </footer>
+  </div>
 
-    setTimeout(()=>{
-      t.remove();
-      activeTaunts = Math.max(0, activeTaunts - 1);
-    }, 1200);
-  }
-
-  function moveNo(){
-    const now = performance.now();
-    if (now - lastMoveAt < MOVE_CD_MS) return;
-    lastMoveAt = now;
-
-    const slot = noSlot.getBoundingClientRect();
-    const btn  = noBtn.getBoundingClientRect();
-
-    const pad = 6;
-    const maxX = Math.max(pad, slot.width  - btn.width  - pad);
-    const maxY = Math.max(pad, slot.height - btn.height - pad);
-
-    const x = randInt(pad, maxX);
-    const y = randInt(pad, maxY);
-
-    noBtn.style.left = x + 'px';
-    noBtn.style.top  = y + 'px';
-    noBtn.style.transform = 'translate(0,0)';
-
-    spawnScreamAndTaunt();
-  }
-
-  arena.addEventListener('mousemove', (e) => {
-    const b = noBtn.getBoundingClientRect();
-    const d = Math.hypot(
-      e.clientX - (b.left + b.width/2),
-      e.clientY - (b.top  + b.height/2)
-    );
-
-    if (d < 130) noBtn.classList.add('shake');
-    else noBtn.classList.remove('shake');
-
-    if (d < 90) moveNo();
-  });
-
-  noBtn.addEventListener('touchstart', (e) => { e.preventDefault(); moveNo(); }, { passive:false });
-  noBtn.addEventListener('click', (e) => { e.preventDefault(); moveNo(); });
-
-  function burstConfetti() {
-    const b = yesBtn.getBoundingClientRect();
-    const cx = b.left + b.width/2;
-    const cy = b.top + b.height/2;
-
-    const colors = ['#ff4d8d','#ff77aa','#ffd1e1','#fff1f7','#ffc2d6','#ffe0ec'];
-    const count = 18;
-
-    for (let i = 0; i < count; i++){
-      const p = document.createElement('div');
-      p.className = 'confetti';
-      p.style.background = colors[randInt(0, colors.length-1)];
-
-      const ang = Math.random() * Math.PI * 2;
-      const dist = 60 + Math.random() * 120;
-      const dx = Math.cos(ang) * dist;
-      const dy = Math.sin(ang) * dist - (30 + Math.random()*50);
-
-      p.style.setProperty('--x0', `0px`);
-      p.style.setProperty('--y0', `0px`);
-      p.style.setProperty('--x1', `${dx}px`);
-      p.style.setProperty('--y1', `${dy}px`);
-
-      p.style.left = cx + 'px';
-      p.style.top  = cy + 'px';
-
-      document.body.appendChild(p);
-      setTimeout(()=>p.remove(), 950);
-    }
-  }
-
-  // ✅ 逐位跳動：把 moneyBox 變成多個 digit 轉輪
-  function rollMoney(money){
-    const moneyBox = document.getElementById('moneyBox');
-    if (!moneyBox) return;
-
-    const digits = String(money).split('');
-    moneyBox.innerHTML = '';
-
-    const digitHeightEm = 1.2; // 對應 CSS .digit 高度
-
-    digits.forEach((d, i) => {
-      const digit = document.createElement('span');
-      digit.className = 'digit';
-
-      const strip = document.createElement('span');
-      strip.className = 'digit-strip';
-
-      // 做兩輪 0-9，讓它看起來有「轉」的距離
-      const rounds = 4;
-      for (let r = 0; r < rounds; r++){
-        for (let n = 0; n <= 9; n++){
-          const s = document.createElement('span');
-          s.textContent = n;
-          strip.appendChild(s);
-        }
-      }
-
-      // 起始位置：隨機（更像抽獎）
-      const start = randInt(0, 9);
-      strip.style.transform = `translateY(${-start * digitHeightEm}em)`;
-
-      // 每位不同的 duration / delay
-      const duration = 700 + i * 120 + randInt(0, 200);
-      const delay = i * 80;
-
-      strip.style.transition = `transform ${duration}ms cubic-bezier(.18,1,.22,1) ${delay}ms`;
-
-      digit.appendChild(strip);
-      moneyBox.appendChild(digit);
-
-      // 下一個 tick 才設定目標，transition 才會生效
-      requestAnimationFrame(() => {
-        // 目標停在最後一輪的該數字（讓它確實「轉過去」）
-        const targetDigit = parseInt(d, 10);
-        const targetIndex = 10 * (rounds - 1) + targetDigit;
-        strip.style.transform = `translateY(${-targetIndex * digitHeightEm}em)`;
-      });
-    });
-  }
-
-  function renderPrize(money, animate){
-    result.classList.remove('muted');
-    resultText.innerHTML = `
-      恭喜獲得 <b>Jelly Cat Bartholomew Bear Junior</b><br>
-      and <b><span id="moneyBox" class="money"></span></b> 元紅包！
-      <span class="small">＊憑截圖領取</span>
-    `;
-
-    if (animate) rollMoney(money);
-    else {
-      // 不動畫（例如刷新後直接顯示）
-      const moneyBox = document.getElementById('moneyBox');
-      moneyBox.textContent = String(money);
-      moneyBox.style.background = 'transparent';
-    }
-  }
-
-  yesBtn.addEventListener('click', () => {
-    let money = localStorage.getItem(MONEY_KEY);
-
-    // 金額：888～4888，且尾數固定 xx88（刷新不變）
-    if (!money) {
-      money = generateMoneyXX88();
-      localStorage.setItem(MONEY_KEY, String(money));
-    } else {
-      money = parseInt(money, 10);
-    }
-
-    renderPrize(money, true);
-    burstConfetti();
-
-    yesBtn.animate(
-      [
-        { transform: 'translateY(0) scale(1)' },
-        { transform: 'translateY(-2px) scale(1.05)' },
-        { transform: 'translateY(0) scale(1)' }
-      ],
-      { duration: 360, easing: 'cubic-bezier(.22,1,.36,1)' }
-    );
-  });
-
-  // 初始：No 放到右側區塊內隨機位置
-  moveNo();
-
-  // 刷新：若已抽過，直接顯示同一筆（不跑動畫，避免一進來就亂跳）
-  const savedMoney = localStorage.getItem(MONEY_KEY);
-  if (savedMoney) renderPrize(parseInt(savedMoney, 10), false);
-
-  window.addEventListener('resize', moveNo);
-</script>
+  <script>
+    document.getElementById("y").textContent = new Date().getFullYear();
+  </script>
 </body>
 </html>
