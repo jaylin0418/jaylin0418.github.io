@@ -382,9 +382,9 @@
   yesBtn.addEventListener('click', () => {
     let money = localStorage.getItem(MONEY_KEY);
 
-    // 若還沒抽過，才抽新的（範圍 888～3888）
+    // 若還沒抽過，才抽新的（範圍 888～4888）
     if (!money) {
-      money = randInt(888, 3888);
+      money = randInt(888, 4888);
       localStorage.setItem(MONEY_KEY, String(money));
     }
 
