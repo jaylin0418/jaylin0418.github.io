@@ -5,4 +5,4 @@ inline: true
 related_posts: false
 ---
 
-Received the <strong>National Taiwan University Presidential Award</strong> (top ~2% of students university-wide).
+Received the <strong>National Taiwan University Presidential Award</strong>.
