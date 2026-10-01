@@ -13,7 +13,7 @@ Instructor: [Prof. Kevin Leyton-Brown](https://www.cs.ubc.ca/~kevinlb/index.html
 
 Below are the courses I TA'd as an undergraduate at National Taiwan University:
 
-**Teaching Assistant, MGT 1006: Programming for Business Computing** <br>
+**Teaching Assistant, MGT 1006: Programming for Business Computing** (2 terms) <br>
 College of Management, National Taiwan University <br>
 Instructor: [Prof. Ling-Chieh Kung](https://www.im.ntu.edu.tw/~lckung/)
 
