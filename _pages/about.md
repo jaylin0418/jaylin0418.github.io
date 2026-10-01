@@ -25,7 +25,7 @@ latest_posts:
 
 I am an M.Sc. student in Computer Science at the University of British Columbia, advised by [Prof. Xin Tang](https://tangxinlab.org/people). My research interests are in applied machine learning, with a focus on AI for healthcare and biological applications, and on building models that are interpretable and explainable.
 
-Before UBC, I completed my B.B.A. in Information Management (minor in Computer Science and Information Engineering) at National Taiwan University, where I was involved in several research labs:
+Before UBC, I completed my undergraduate studies in Information Management (minor in Computer Science and Information Engineering) at National Taiwan University, where I was involved in several research labs:
 
 - Project research assistant in the Speech Processing and Machine Learning Lab, advised by [Prof. Hung-yi Lee](https://speech.ee.ntu.edu.tw/~hylee/index.php), working on Taiwan-localized speech LLMs
 - Mitacs Globalink research intern at the University of Alberta, working with [Prof. Russell Greiner](https://rgreiner6.wixsite.com/greiner) and Prof. Sunil Kalmady Vasu on deep survival prediction for cardiovascular patients
