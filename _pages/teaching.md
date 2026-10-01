@@ -7,7 +7,7 @@ nav: true
 nav_order: 3
 ---
 
-**Graduate Teaching Assistant, CPSC 330: Applied Machine Learning** <br>
+**Graduate Teaching Assistant, AI 100: Introduction to Artificial Intelligence** <br>
 Dept. of Computer Science, University of British Columbia &middot; Sep&ndash;Dec 2026
 
 Below are the courses I TA'd as an undergraduate at National Taiwan University:
