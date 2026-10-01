@@ -27,9 +27,9 @@ I am an incoming M.Sc. student in Computer Science at the University of British 
 
 Before UBC, I completed my B.B.A. in Information Management (minor in Computer Science and Information Engineering) at National Taiwan University, where I was involved in several research labs:
 
-- Undergraduate research student in the Pervasive and Autonomous Intelligence Lab, advised by [Prof. Fang-Jing Wu](https://sites.google.com/site/fangjingwu1/home), working on indoor positioning from ambient light sensing
 - Project research assistant in the Speech Processing and Machine Learning Lab, advised by [Prof. Hung-yi Lee](https://speech.ee.ntu.edu.tw/~hylee/index.php), working on Taiwan-localized speech LLMs
-- Summer research student in the [Bio-ASP Lab](https://bio-asplab.citi.sinica.edu.tw/about-us.html) at the Institute of Information Science, Academia Sinica, working with [Dr. Yu Tsao](https://homepage.citi.sinica.edu.tw/pages/yu.tsao/index_en.html) on ECG super-resolution using deep learning
 - Mitacs Globalink research intern at the University of Alberta, working with [Prof. Russell Greiner](https://rgreiner6.wixsite.com/greiner) and Prof. Sunil Kalmady Vasu on deep survival prediction for cardiovascular patients
+- Undergraduate research student in the Pervasive and Autonomous Intelligence Lab, advised by [Prof. Fang-Jing Wu](https://sites.google.com/site/fangjingwu1/home), working on indoor positioning from ambient light sensing
+- Summer research student in the [Bio-ASP Lab](https://bio-asplab.citi.sinica.edu.tw/about-us.html) at the Institute of Information Science, Academia Sinica, working with [Dr. Yu Tsao](https://homepage.citi.sinica.edu.tw/pages/yu.tsao/index_en.html) on ECG super-resolution using deep learning
 
 On the industry side, I was an AI R&D intern at [Tomofun](https://furbo.com/us), a pet technology startup, where I worked on AI algorithm and application related research and applied it to products.
