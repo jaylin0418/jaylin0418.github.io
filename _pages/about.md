@@ -32,4 +32,4 @@ Before UBC, I completed my undergraduate studies in Information Management (mino
 - Undergraduate research student in the Pervasive and Autonomous Intelligence Lab, advised by [Prof. Fang-Jing Wu](https://sites.google.com/site/fangjingwu1/home), working on indoor positioning from ambient light sensing
 - Summer research student in the [Bio-ASP Lab](https://bio-asplab.citi.sinica.edu.tw/about-us.html) at the Institute of Information Science, Academia Sinica, working with [Dr. Yu Tsao](https://homepage.citi.sinica.edu.tw/pages/yu.tsao/index_en.html) on ECG super-resolution using deep learning
 
-On the industry side, I was an AI R&D intern at [Tomofun](https://furbo.com/us), a pet technology startup, where I worked on AI algorithm and application related research and applied it to products.
+On the industry side, I was an AI R&D intern at [Tomofun](https://furbo.com/us), a world leading pet technology startup, where I worked on AI algorithm and application related research and applied it to products.
